@@ -241,9 +241,9 @@ field_default_value(field, options) ::= <<
 field_declaration(field, options, modifier) ::= <<
 <if(field.repeated)>
 <if(field.extraOptions.ByteBuffer)>
-<modifier; format=" ">List\<ByteBuffer\> <var(val=field.name, fmt="CC", options=options)>;
+<modifier; format=" ">List\<ByteBuffer\> <var(val=field.name, fmt="CC", options=options)> = new ArrayList\<ByteBuffer\>();
 <else>
-<modifier; format=" ">List\<<map_primitive_wrapper.(field.javaType)>\> <var(val=field.name, fmt="CC", options=options)>;
+<modifier; format=" ">List\<<map_primitive_wrapper.(field.javaType)>\> <var(val=field.name, fmt="CC", options=options)> = new ArrayList\<<map_primitive_wrapper.(field.javaType)>\>();
 <endif>
 <else>
 <modifier; format=" "><field:field_singular_type(field=it, options=options)> <var(val=field.name, fmt="CC", options=options)><field:field_assign_defaults(field=it, options=options)>;
@@ -317,14 +317,14 @@ field_getters_and_setters(field, options, message) ::= <<
 
 public List\<<map_primitive_wrapper.(field.javaType)>\> get<field.name; format="PC">List()
 {
-    return <var(val=field.name, fmt="CC", options=options)>;
+    return <var(val=field.name, fmt="CC", options=options)> == null ? java.util.Collections.\<<map_primitive_wrapper.(field.javaType)>\>emptyList() : <var(val=field.name, fmt="CC", options=options)>;
 }
 
 <if(!options.no_setters)>
 
 public <field:builder_pattern_return_type(field=it, options=options, type=message.name)> set<field.name; format="PC">List(List\<<map_primitive_wrapper.(field.javaType)>\> <var(val=field.name, fmt="CC", options=options)>)
 {
-    this.<var(val=field.name, fmt="CC", options=options)> = <var(val=field.name, fmt="CC", options=options)>;
+    this.<var(val=field.name, fmt="CC", options=options)> = <var(val=field.name, fmt="CC", options=options)> == null ? new ArrayList\<<map_primitive_wrapper.(field.javaType)>\>() : <var(val=field.name, fmt="CC", options=options)>;
     <field:builder_pattern_return(field=it, options=options)>
 }
 
@@ -333,7 +333,7 @@ public <field:builder_pattern_return_type(field=it, options=options, type=messag
 
 public <map_primitive_wrapper.(field.javaType)> get<field.name; format="PC">(int index)
 {
-    return <var(val=field.name, fmt="CC", options=options)> == null ? null : <var(val=field.name, fmt="CC", options=options)>.get(index);
+    return get<field.name; format="PC">List().get(index);
 }
 
 public int get<field.name; format="PC">Count()
@@ -392,6 +392,18 @@ public boolean equals(Object obj) {
 private boolean equals(Object a, Object b) {
     return (a == b) || (a != null && a.equals(b));
 }
+<if(message.repeatedFieldPresent)>
+
+private boolean listEquals(java.util.List\<?> a, java.util.List\<?> b) {
+    if (a == b) {
+        return true;
+    }
+    if (a == null || a.isEmpty()) {
+        return b == null || b.isEmpty();
+    }
+    return a.equals(b);
+}
+<endif>
 
 @Override
 public int hashCode() {
@@ -405,11 +417,19 @@ public int hashCode() {
 >>
 
 field_equals(field, options, message) ::= <<
+<if(field.repeated)>
+listEquals(this.<var(val=field.name, fmt="CC", options=options)>, that.<var(val=field.name, fmt="CC", options=options)>)
+<else>
 equals(this.<var(val=field.name, fmt="CC", options=options)>, that.<var(val=field.name, fmt="CC", options=options)>)
+<endif>
 >>
 
 field_name(field, options, message) ::= <<
+<if(field.repeated)>
+(<var(val=field.name, fmt="CC", options=options)> == null || <var(val=field.name, fmt="CC", options=options)>.isEmpty() ? java.util.Collections.\<<map_primitive_wrapper.(field.javaType)>\>emptyList() : <var(val=field.name, fmt="CC", options=options)>)
+<else>
 <var(val=field.name, fmt="CC", options=options)>
+<endif>
 >>
 
 builder_pattern_return_type(field, options, type) ::= <<

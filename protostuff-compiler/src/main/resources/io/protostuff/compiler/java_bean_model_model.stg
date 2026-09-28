@@ -68,17 +68,17 @@ field_getters_and_setters(field, options, message) ::= <<
 <if(field.repeated)>
 
 public List\<<map_primitive_wrapper.(field.javaType)>\> get<field.name; format="PC">List() {
-    return <var(val=field.name, fmt="CC", options=options)>;
+    return <var(val=field.name, fmt="CC", options=options)> == null ? java.util.Collections.\<<map_primitive_wrapper.(field.javaType)>\>emptyList() : <var(val=field.name, fmt="CC", options=options)>;
 }
 
 public <field:builder_pattern_return_type(field=it, options=options, type=(remote_model_name(message=message, name=message.name, noprefix=1)))> set<field.name; format="PC">List(List\<<map_primitive_wrapper.(field.javaType)>\> <var(val=field.name, fmt="CC", options=options)>) {
-    this.<var(val=field.name, fmt="CC", options=options)> = <var(val=field.name, fmt="CC", options=options)>;
+    this.<var(val=field.name, fmt="CC", options=options)> = <var(val=field.name, fmt="CC", options=options)> == null ? new ArrayList\<<map_primitive_wrapper.(field.javaType)>\>() : <var(val=field.name, fmt="CC", options=options)>;
     <field:builder_pattern_return(field=it, options=options)>
 }
 <if(options.generate_helper_methods)>
 
 public <map_primitive_wrapper.(field.javaType)> get<field.name; format="PC">(int index) {
-    return <var(val=field.name, fmt="CC", options=options)> == null ? null : <var(val=field.name, fmt="CC", options=options)>.get(index);
+    return get<field.name; format="PC">List().get(index);
 }
 
 public int get<field.name; format="PC">Count() {

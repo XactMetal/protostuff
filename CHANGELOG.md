@@ -1,5 +1,6 @@
 protostuff-1.8.1-SNAPSHOT
 - fix NPE for `delegates` on arrays (Issue 336)
+- `java_bean` repeated fields default to an empty list. A missing repeated field compares equal to an empty one.
 
 protostuff-1.8.0 2022-03-12
 ===========================

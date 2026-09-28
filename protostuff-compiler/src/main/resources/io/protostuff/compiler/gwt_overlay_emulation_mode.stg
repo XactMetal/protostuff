@@ -135,7 +135,7 @@ public final native <map_repeated_prefix.(field.class.simpleName)><map_repeated_
 public final java.util.List\<<map_repeated_value.(field.javaType)>\> get<field.name; format="PC">List() {
     <map_repeated_prefix.(field.class.simpleName)><map_repeated_value.(field.javaType)><map_repeated_suffix.(field.class.simpleName)> array = get<field.name; format="PC">Array();
     if (array == null)
-        return null; 
+        return java.util.Collections.emptyList();
 
     int len = array.length();
     if (len == 0)
@@ -160,7 +160,9 @@ public final native <map_repeated_prefix.(field.class.simpleName)><map_repeated_
 
 public final <map_singular_value.(field.javaType)> get<field.name; format="PC">(int index) {
     <map_repeated_prefix.(field.class.simpleName)><map_repeated_value.(field.javaType)><map_repeated_suffix.(field.class.simpleName)> array = get<field.name; format="PC">Array();
-    return array == null ? null : array.get(index);
+    if (array == null)
+        throw new IndexOutOfBoundsException();
+    return array.get(index);
 }
 
 public final int get<field.name; format="PC">Count() {

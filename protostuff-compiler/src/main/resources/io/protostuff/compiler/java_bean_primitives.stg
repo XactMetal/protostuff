@@ -35,7 +35,7 @@ List\<<map_primitive_wrapper.(field.javaType)>\><else>
 >>
 
 field_assign_constructor(field, options) ::= <<
-this.<var(val=field.name, fmt="CC", options=options)> = <if(field.repeated)>java.util.Collections.unmodifiableList(<endif><var(val=field.name, fmt="CC", options=options)><if(field.repeated)>)<endif>;
+this.<var(val=field.name, fmt="CC", options=options)> = <if(field.repeated)><var(val=field.name, fmt="CC", options=options)> == null ? java.util.Collections.emptyList() : java.util.Collections.unmodifiableList(<var(val=field.name, fmt="CC", options=options)>)<else><var(val=field.name, fmt="CC", options=options)><endif>;
 >>
 
 message_method_is_initialized(message, options) ::= <<
