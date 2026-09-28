@@ -1,18 +1,18 @@
 group java_bean : base;
 
 map_value_prefix ::= [
-    "Int64":  "new Long(",
-    "UInt64":  "new Long(",
-    "SInt64":  "new Long(",
-    "Fixed64":  "new Long(",
-    "SFixed64":  "new Long(",
-    "Float": "new Float(",
-    "Double": "new Double(",
-    "Bool": "new Boolean(",
+    "Int64":  "Long.valueOf(",
+    "UInt64":  "Long.valueOf(",
+    "SInt64":  "Long.valueOf(",
+    "Fixed64":  "Long.valueOf(",
+    "SFixed64":  "Long.valueOf(",
+    "Float": "Float.valueOf(",
+    "Double": "Double.valueOf(",
+    "Bool": "Boolean.valueOf(",
     "Bytes": "ByteString.bytesDefaultValue(\"",
     "String": "ByteString.stringDefaultValue(\"",
     "EnumField": ,
-    default: "new Integer("
+    default: "Integer.valueOf("
 ]
 
 map_value_suffix ::= [
